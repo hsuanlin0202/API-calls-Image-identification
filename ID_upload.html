@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1.0, user-scalable=0" />
+    <link rel="stylesheet" href="css/style.css" />
+
+    <title>格上租車</title>
+</head>
+
+<body>
+    <div class="main_container wid100 fx fx_center fx_wrap">
+
+        <div class="main_table fx fx_wrap">
+            <div class="table_td wid100 fx fx_center first_tr">負責人資料及身分證件</div>
+            <div class="table_td fx fx_desknowrap wid100">
+	            <div class="wid100 fx fx_nowrap">
+	                <div class="table_td wid40 fx fx_center">*負責人姓名</div>
+	                <div class="table_td wid60 fx fx_center"><input id="name" type="text" /></div>
+                </div>
+                <div class="wid100 fx fx_nowrap">
+	                <div class="table_td wid40 fx fx_center">*出生日期</div>
+	                <div class="table_td wid60 fx fx_center"><input id="brithday" type="text" /></div>
+                </div>
+            </div>
+            <div class="fx fx_desknowrap wid100">
+            	<div class="wid100 fx fx_nowrap">
+	                <div class="table_td wid40 fx fx_center font-tight">*身份證字號/居留證號</div>
+	                <div class="table_td wid60 fx fx_center"><input id="idNum" type="text" /></div>
+                </div>
+                <div class="wid100 fx fx_nowrap">
+	                <div class="table_td wid40 fx fx_center">性別</div>
+	                <div class="table_td wid60 fx fx_center"><input id="gender" type="text" /></div>
+                </div>
+            </div>
+            <div class="fx fx_desknowrap wid100">
+            	<div class="wid100 fx fx_nowrap">
+	                <div class="table_td wid40 fx fx_center">發證日期</div>
+	                <div class="table_td wid60 fx fx_center"><input id="dayOfIssue" type="text" /></div>
+                </div>
+                <div class="wid100 fx fx_nowrap">
+	                <div class="table_td wid40 fx fx_center">發證單位</div>
+	                <div class="table_td wid60 fx fx_center"><input id="authority" type="text" /></div>
+                </div>
+            </div>
+            <div class="fx fx_nowrap wid100">
+                <div class="table_td wid20 fx fx_center">居住地</div>
+                <div class="table_td wid80 fx fx_center"><input id="address" type="text" /></div>
+            </div>
+            <div class="fx fx_desknowrap wid100">
+                <label for="uploadImage1" class="table_td wid100 fx fx_center id_img" style="overflow:hidden;height:200px;">
+                    <input class="id_file" type="file" id="uploadImage1" name="uploadImage1" accept="image/*">
+                    <div  class="fx fx_wrap fx_center">
+	                    <div class="fx fx_center" id="show1"></div>
+	                    <span id="id_wordF" class="wid100 fx fx_center">身份證件正面上傳</span>
+                    </div>
+                </label>
+                <label for="uploadImage2" class="table_td wid100 fx fx_center id_img" style="overflow:hidden;height:200px;">
+                    <input class="id_file" type="file" id="uploadImage2" name="uploadImage2" accept="image/*">
+                    <div class="fx fx_wrap fx_center">
+	                    <div class="fx fx_center" id="show2"></div>
+	                    <span id="id_wordB" class="wid100 fx fx_center">身份證件反面上傳</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+        <div class="btn_box wid100 fx fx_center fx_desknowrap">
+            <div class="btn fx fx_center">儲存並關閉</div>
+            <div class="btn fx fx_center" onClick="location.href='/'">返回</div>
+        </div>
+
+    </div>
+    <script src="js/jquery-3.5.0.min.js"></script>
+    <script src="js/jquery.blockUI.js"></script>
+    <script src="js/watermark.min.js"></script>
+    <script src="js/Jscript.js"></script>
+    <script>
+        let img64 = "";
+        let id_f, id_b = "";
+        let water_width;
+        let info_check = false;
+        
+        
+        $("#uploadImage1").change(function () {
+            readImage(this,"show1");
+            $('#show1').empty();
+        });
+        
+        $("#uploadImage2").change(function () {
+            readImage(this,"show2");
+            $('#show2').empty();
+        });
+
+        function readImage(input,show_id) {
+            if (input.files && input.files[0]) {
+                var FR = new FileReader();
+                FR.onload = function (e) {
+                	var base64result = e.target.result;
+                	//console.log(base64result);
+                    img64 = base64result.split(',')[1];
+                    //console.log(img64);
+                    var img = new Image;
+			            img.onload = function() {
+			              water_width = img.width/15;
+			              //console.log(water_width);
+          			  };	
+          			img.src = FR.result;
+                    
+                    
+                    var rotate = function(target) {
+                  	  var context = target.getContext('2d');
+                  	  text = watermark_text;
+                  	  var metrics = context.measureText(text);
+                  	  var x = (target.width / 2) - (metrics.width+(water_width*2));
+                  	  var y = (target.height / 2) + (water_width*2) * 2;
+
+                  	  context.translate(x, y);
+                  	  context.globalAlpha = 0.3;
+                  	  context.fillStyle = '#169BD5';
+                  	  context.font =  water_width + 'px Josefin Slab';
+                  	  context.rotate(-45 * Math.PI / 180);
+                  	  context.fillText(text, 0, 0);
+                  	  return target;
+                  	};
+                  	
+                    
+                    watermark([ base64result ]).image(rotate)
+					.then(function(img) {
+						img.id = "img_"+show_id;
+						img.setAttribute('height', '180px');
+						document.getElementById(show_id).appendChild(img);
+						//img64 = img.src.split(',')[1];
+						pic_send(show_id);
+					});
+                    
+                    $('#'+show_id).attr("src", img.src);
+                    $('#'+show_id).attr("width", "180px");
+                    
+                };
+                FR.readAsDataURL(input.files[0]);
+
+                
+            }
+            
+        }
+        
+        const pic_send = (show_id) => {
+        	//console.log(img64);
+        	if(show_id == "show1"){
+            	id_check_f();
+            	
+            }else{
+            	id_check_b();
+            }
+        }
+        
+    </script>
+
+</body>
+
+</html>

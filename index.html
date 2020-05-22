@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1.0, user-scalable=0" />
+<link rel="stylesheet" href="css/style.css" />
+
+<title>格上租車</title>
+</head>
+
+<body>
+	<div class="main_container wid100 fx fx_center fx_wrap">
+
+		圖形識別
+		<div class="btn_box wid100 fx fx_center fx_desknowrap">
+			<div class="btn fx fx_center" onClick="location.href='ID_upload'">身分證識別</div>
+			<div class="btn fx fx_center" onClick="location.href='name_card'">名片識別</div>
+			<div class="btn fx fx_center" onClick="location.href='form401'">401表格識別</div>
+		</div>
+
+	</div>
+
+	<img id="img" src="">
+	<script src="js/jquery-3.5.0.min.js"></script>
+	<script src="js/jquery.blockUI.js"></script>
+	<script src="js/watermark.min.js"></script>
+	<script src="js/Jscript.js"></script>
+	<script>
+		let img64 = "";
+		let water_width = 70;
+		let info_check = false;
+
+		$('#extension').hide();
+		$('#btn_box').hide();
+		$('#cardPhone1').hide();
+		$('#cardPhone2').hide();
+
+		$("#cardPhone1").change(function() {
+			var num = $('#cardPhone1').val();
+			$("#key_phone1").val(num);
+		});
+		
+		$("#cardPhone2").change(function() {
+			var num = $('#cardPhone2').val();
+			$("#key_phone2").val(num);
+		});
+		
+		$("#uploadImage").change(function() {
+			readImage(this);
+			$('#upbtn').hide();
+			$('#btn_box').show();
+			$('#showImg').empty();
+		});
+
+		function readImage(input) {
+			if (input.files && input.files[0]) {
+				var FR = new FileReader();
+				FR.onload = function(e) {
+
+					var base64result = e.target.result;
+					img64 = base64result.split(',')[1];
+					
+					var img = new Image;
+		            img.onload = function() {
+		              water_width = img.width/15;
+	      			};	
+	      			img.src = FR.result;
+	      			
+	      			var rotate = function(target) {
+	                  	  var context = target.getContext('2d');
+	                  	  text = watermark_text;
+	                  	  var metrics = context.measureText(text);
+	                  	  var x = (target.width / 2) - (metrics.width+(water_width*2));
+	                  	  var y = (target.height / 2) + (water_width*2) * 2;
+
+	                  	  context.translate(x, y);
+	                  	  context.globalAlpha = 0.7;
+	                  	  context.fillStyle = '#169BD5';
+	                  	  context.font = water_width + 'px Josefin Slab';
+	                  	  context.rotate(-45 * Math.PI / 180);
+	                  	  context.fillText(text, 0, 0);
+	                  	  return target;
+	                };
+      			
+      			
+					//console.log(img64);
+					watermark([ base64result ]).image(rotate)
+					.then(function(img) {
+						img.id = "show1";
+						img.setAttribute('width', '300px');
+						document.getElementById('showImg').appendChild(img);
+					});
+				};
+				FR.readAsDataURL(input.files[0]);
+
+			}
+		}
+	</script>
+</body>
+
+</html>

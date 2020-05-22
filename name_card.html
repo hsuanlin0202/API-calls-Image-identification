@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1.0, user-scalable=0" />
+<link rel="stylesheet" href="css/style.css" />
+
+<title>格上租車</title>
+</head>
+
+<body>
+	<div class="main_container wid100 fx fx_center fx_wrap">
+
+		<div class="main_table fx fx_wrap">
+			<div class="table_td wid100 fx fx_center first_tr">[介紹人]名片辨識</div>
+			<div class="table_td fx fx_wrap wid100 card_inputbox">
+				<div class="wid100 fx fx_center fx_wrap">
+					<div class="fx fx_center wid100" id="showImg"></div>
+					<label class="custom-file-upload" for="uploadImage">
+						<span id="upbtn" class="fx fx_center" >上傳名片</span> 
+						<input class="id_file" type="file" id="uploadImage" name="uploadImage" accept="image/*">
+					</label>
+					
+				</div>
+				<div id="btn_box" class="wid100 fx fx_wrap fx_center" style="margin: 10px;">
+					<div class="btn fx fx_center" id="idcard_send" >辨識</div>
+					<label class="btn fx fx_center" for="uploadImage">重新上傳</label>
+				</div>
+			</div>
+			<div class="table_td wid100 fx fx_center first_tr">辨識結果</div>
+			<div class="table_td fx fx_desknowrap wid100">
+				<div class="wid100 fx fx_nowrap">
+					<div class="table_td wid40 fx fx_center">機構名稱</div>
+					<div class="table_td wid60 fx fx_center">
+						<input type="text" id="companyName" />
+					</div>
+				</div>
+				<div class="wid100 fx fx_nowrap">
+					<div class="table_td wid40 fx fx_center">統一編號</div>
+					<div class="table_td wid60 fx fx_center">
+						<input type="text" id="presidentNo" />
+					</div>
+				</div>
+			</div>
+			<div class="fx fx_desknowrap wid100">
+				<div class="wid100 fx fx_nowrap">
+					<div class="table_td wid40 fx fx_center">姓名</div>
+					<div class="table_td wid60 fx fx_center">
+						<input type="text" id="cardName" />
+					</div>
+				</div>
+				<div class="wid100 fx fx_nowrap">
+					<div class="table_td wid40 fx fx_center">職稱</div>
+					<div class="table_td wid60 fx fx_center">
+						<input type="text" id="cardTitle" />
+					</div>
+				</div>
+			</div>
+			<div class="fx fx_desknowrap wid100">
+				<div class="wid100 fx fx_nowrap">
+					<div class="table_td wid40 fx fx_center">電話</div>
+					<div class="table_td wid60 fx fx_center fx_wrap">
+						<select class="wid100" id="cardPhone1">
+							<option value="0">請選擇電話</option>
+						</select>
+						<input class="wid100" type="text" id="key_phone1" />
+						<div class="fx fx_center fx_nowrap wid50" id="extension">
+							<label> - </label> <input type="text" id="extnum" />
+						</div>
+					</div>
+				</div>
+				<div class="wid100 fx fx_nowrap">
+					<div class="table_td wid40 fx fx_center">行動電話</div>
+					<div class="table_td wid60 fx fx_center fx_wrap">
+						<select class="wid100" id="cardPhone2">
+							<option value="0">請選擇行動電話</option>
+						</select>
+						<input class="wid100" type="text" id="key_phone2" />
+					</div>
+				</div>
+			</div>
+			
+			<div class="fx fx_desknowrap wid100">
+				<div class="wid100 fx fx_nowrap">
+					<div class="table_td wid20-40 fx fx_center">電子郵件</div>
+					<div class="table_td wid80-60 fx fx_center">
+						<input type="text" id="cardEmail" />
+					</div>
+				</div>
+			</div>
+			
+			<div class="fx fx_desknowrap wid100">
+				<div class="wid100 fx fx_nowrap">
+					<div class="table_td wid20-40 fx fx_center">地址</div>
+					<div class="table_td wid80-60 fx fx_center">
+						<input type="text" id="cardAddress" />
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<div class="btn_box wid100 fx fx_center fx_desknowrap">
+			<div class="btn fx fx_center" onClick="card_done()">確認</div>
+			<div class="btn fx fx_center" onClick="location.href='/'">返回</div>
+		</div>
+
+	</div>
+
+	<img id="img" src="">
+	<script src="js/jquery-3.5.0.min.js"></script>
+	<script src="js/jquery.blockUI.js"></script>
+	<script src="js/watermark.min.js"></script>
+	<script src="js/Jscript.js"></script>
+	<script>
+		let img64 = "";
+		let water_width = 70;
+		let info_check = false;
+
+		$('#extension').hide();
+		$('#btn_box').hide();
+		$('#cardPhone1').hide();
+		$('#cardPhone2').hide();
+
+		$("#cardPhone1").change(function() {
+			var num = $('#cardPhone1').val();
+			$("#key_phone1").val(num);
+		});
+		
+		$("#cardPhone2").change(function() {
+			var num = $('#cardPhone2').val();
+			$("#key_phone2").val(num);
+		});
+		
+		$("#uploadImage").change(function() {
+			readImage(this);
+			$('#upbtn').hide();
+			$('#btn_box').show();
+			$('#showImg').empty();
+		});
+
+		function readImage(input) {
+			if (input.files && input.files[0]) {
+				var FR = new FileReader();
+				FR.onload = function(e) {
+
+					var base64result = e.target.result;
+					img64 = base64result.split(',')[1];
+					
+					var img = new Image;
+		            img.onload = function() {
+		              water_width = img.width/15;
+	      			};	
+	      			img.src = FR.result;
+	      			
+	      			var rotate = function(target) {
+	                  	  var context = target.getContext('2d');
+	                  	  text = watermark_text;
+	                  	  var metrics = context.measureText(text);
+	                  	  var x = (target.width / 2) - (metrics.width+(water_width*2));
+	                  	  var y = (target.height / 2) + (water_width*2) * 2;
+
+	                  	  context.translate(x, y);
+	                  	  context.globalAlpha = 0.7;
+	                  	  context.fillStyle = '#169BD5';
+	                  	  context.font = water_width + 'px Josefin Slab';
+	                  	  context.rotate(-45 * Math.PI / 180);
+	                  	  context.fillText(text, 0, 0);
+	                  	  return target;
+	                };
+      			
+      			
+					//console.log(img64);
+					watermark([ base64result ]).image(rotate)
+					.then(function(img) {
+						img.id = "show1";
+						img.setAttribute('width', '300px');
+						document.getElementById('showImg').appendChild(img);
+					});
+				};
+				FR.readAsDataURL(input.files[0]);
+
+			}
+		}
+	</script>
+</body>
+
+</html>
