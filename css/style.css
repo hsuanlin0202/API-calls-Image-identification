@@ -1,0 +1,145 @@
+@import url(hl_toolpack.css);
+
+body {
+	background: white;
+}
+
+.main_container {
+	width: 100%;
+	padding: 30px 0;
+	font-size: 14px;
+	color: #333333;
+}
+
+.main_table {
+	border: 1px solid #999999;
+}
+
+.table_td {
+	border: 0.5px solid #999999;
+	min-height: 30px;
+}
+
+.table_td input[type="text"], .table_td select {
+	padding: 3px;
+	margin: 3px 7px;
+	width: 100%;
+	border: 1px solid #999999;
+}
+
+.table_td select {
+	height: 30px;
+	border-radius: 0;
+}
+
+.first_tr {
+	background: #80D4F8;
+	height: 40px;
+}
+
+.id_img {
+	height: 100%;
+	min-height:250px;
+	color: #169BD5;
+}
+
+.card_inputbox {
+	padding: 10px;
+}
+
+.btn_box {
+	margin: 30px;
+}
+
+.btn {
+	margin: 5px 10px;
+	border-radius: 5px;
+	border: 1px solid #999999;
+	background: white;
+	height: 40px;
+	cursor: pointer;
+}
+
+.btn:hover {
+	background: #dddddd;
+}
+
+.id_file {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	border: 0;
+}
+
+.custom-file-upload {
+	border: none;
+	background: white;
+	width: 100%;
+	max-width:320px;
+	cursor: pointer;
+}
+
+#upbtn{
+	margin:13px auto;
+	border: 1px solid #999999;
+	padding:10px;
+}
+
+
+@media screen and (min-width: 992px) {
+	
+	.fx_desknowrap{
+		-ms-flex-wrap: nowrap;
+    	flex-wrap: nowrap
+	}
+	.main_table {
+		width: 70%;
+		min-width: 900px;
+	}
+	
+	.wid20-40{
+		width:20%;
+	}
+	
+	.wid80-60{
+		width:80%;
+	}
+	
+	.btn {
+		width:140px;
+	}
+}
+
+
+@media screen and (max-width: 991px) {
+	
+	.main_table {
+		width: 90%;
+		min-width: 300px;
+	}
+	
+	.fx_desknowrap{
+		-ms-flex-wrap: wrap;
+    	flex-wrap: wrap
+	}
+	
+	.wid20-40{
+		width:40%;
+	}
+	
+	.wid80-60{
+		width:60%;
+	}
+	.btn {
+		width:80%;
+	}
+	.font-tight{
+	 letter-spacing:-2px;
+	}
+}
+
+/*# sourceMappingURL=style.css.map */
